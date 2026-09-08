@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인사 플랫폼 도메인 배치 기준</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EFF2EE;--paper-2:#F7F9F6;--ink:#17211C;--ink-2:#40514A;--ink-3:#6B7B74;
+  --rule:#C6D0C8;--rule-2:#DDE4DD;--seal:#A63D2F;
+  --core:#28605C;--core-bg:#DCE9E6;--edge:#7A6533;--edge-bg:#EAE3D0;
+  --base:#3F4E7A;--base-bg:#DDE2F0;--max:1080px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans KR',system-ui,sans-serif;
+  font-weight:300;font-size:16px;line-height:1.8;letter-spacing:-0.01em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+
+.masthead{border-bottom:2px solid var(--ink);padding:56px 0 22px}
+.doc-meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);display:flex;gap:20px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--rule-2);margin-bottom:24px}
+h1{font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(30px,5.2vw,50px);line-height:1.24;letter-spacing:-0.02em;margin:0 0 14px}
+.standfirst{font-size:17px;color:var(--ink-2);max-width:62ch;margin:0;line-height:1.75}
+
+section{padding:52px 0;border-bottom:1px solid var(--rule-2)}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--seal);margin:0 0 10px;font-weight:500}
+h2{font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(22px,3.4vw,31px);line-height:1.35;letter-spacing:-0.015em;margin:0 0 18px;max-width:24ch}
+h3{font-weight:600;font-size:16.5px;margin:34px 0 12px;letter-spacing:-0.01em}
+p{margin:0 0 16px;max-width:68ch}
+strong{font-weight:600;color:var(--ink)}
+code{font-family:'IBM Plex Mono',monospace;font-size:.88em;background:var(--paper-2);
+  border:1px solid var(--rule-2);padding:1px 5px;border-radius:2px;color:var(--core)}
+
+.deploy{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:6px 0 8px}
+.deploy .span2{grid-column:1/-1}
+.unit{border:1.5px solid var(--ink);background:var(--paper-2);overflow:hidden}
+.unit-hd{padding:14px 18px;border-bottom:1px solid var(--rule)}
+.unit-hd.edge{background:var(--edge-bg)}
+.unit-hd.core{background:var(--core-bg)}
+.unit-hd.base{background:var(--base-bg)}
+.unit-hd.infra{background:var(--paper)}
+.unit-name{font-weight:600;font-size:16px;letter-spacing:-0.01em}
+.unit-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+.unit-body{padding:16px 18px}
+.mods{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.mod{font-size:13.5px;padding:5px 11px;border:1px solid var(--core);color:var(--core);
+  background:#fff;border-radius:2px}
+.mod.solo{border-color:var(--edge);color:var(--edge)}
+.mod.b{border-color:var(--base);color:var(--base)}
+.dbtag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;
+  color:var(--ink-2);padding-top:12px;border-top:1px dashed var(--rule)}
+.boundary{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--seal);margin:16px 0 30px}
+.boundary::before{content:"";flex:0 0 34px;height:0;border-top:1.5px solid var(--seal)}
+.boundary::after{content:"";flex:1;height:0;border-top:1px dashed var(--rule)}
+
+.tiers{border:1.5px solid var(--ink);background:var(--paper-2);margin:8px 0 22px}
+.tier{display:grid;grid-template-columns:64px 1fr;border-bottom:1px solid var(--rule-2)}
+.tier:last-child{border-bottom:none}
+.tier-n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;background:var(--paper);
+  border-right:1px solid var(--rule);color:var(--ink-3)}
+.tier-b{padding:15px 20px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.tier-name{font-weight:600;font-size:16px;min-width:118px}
+.tier-dep{font-size:14px;color:var(--ink-2)}
+.tier.base{background:#fff}
+.tier.base .tier-n{background:var(--base-bg);color:var(--base)}
+.tier.base .tier-name{color:var(--base)}
+
+.mx-scroll{overflow-x:auto;margin:8px 0 18px;border:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;background:var(--paper-2);font-size:14px;min-width:660px}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--rule-2);border-right:1px solid var(--rule-2)}
+th:last-child,td:last-child{border-right:none}
+tr:last-child td{border-bottom:none}
+thead th{background:var(--paper);font-weight:500;font-size:11.5px;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);border-bottom:1.5px solid var(--ink);white-space:nowrap}
+tbody th{font-weight:500;font-size:14px;white-space:nowrap;background:var(--paper)}
+td{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500}
+td.rw{color:var(--seal)}
+td.ro{color:var(--core)}
+td.no{color:#B9C4BC}
+table.plain{min-width:520px}
+table.plain td{text-align:left;font-family:'IBM Plex Sans KR',sans-serif;font-size:14.5px;
+  font-weight:300;line-height:1.65}
+table.plain tbody th{vertical-align:top;padding-top:13px}
+
+.sql{background:var(--paper-2);border:1.5px solid var(--ink);padding:20px 22px;margin:8px 0 20px;
+  overflow-x:auto;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.85;
+  color:var(--ink-2);white-space:pre}
+.sql .k{color:var(--seal)}
+.sql .c{color:var(--ink-3)}
+.sql .t{color:var(--core);font-weight:500}
+
+.axes{border:1.5px solid var(--ink);background:var(--paper-2);padding:24px 22px;margin:8px 0 20px}
+.axis-row{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center;
+  padding:13px 0;border-bottom:1px dashed var(--rule)}
+.axis-row:last-child{border-bottom:none;padding-bottom:0}
+.axis-lbl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--seal);font-weight:500;text-align:right}
+.axis-bar{position:relative;height:34px}
+.axis-line{position:absolute;top:16px;left:0;right:0;height:0;border-top:1px solid var(--rule)}
+.pin{position:absolute;top:0;transform:translateX(-50%);text-align:center;white-space:nowrap}
+.pin i{display:block;width:1.5px;height:16px;background:var(--seal);margin:0 auto 3px}
+.pin span{font-size:12px;color:var(--ink-2)}
+.axis-note{margin-top:18px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:14.5px;color:var(--ink-2);line-height:1.7}
+
+.calls{border:1.5px solid var(--ink);background:var(--paper-2);margin:8px 0 20px}
+.call{padding:18px 20px;border-bottom:1px solid var(--rule-2);display:grid;
+  grid-template-columns:118px 1fr;gap:18px}
+.call:last-child{border-bottom:none}
+.verdict{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:500;padding-top:3px}
+.verdict.yes{color:var(--core)}
+.verdict.no{color:var(--seal)}
+.call-b p{margin:0;font-size:14.5px;line-height:1.7}
+.call-t{font-weight:600;font-size:15.5px;margin-bottom:5px;display:block}
+
+.note{border-left:2.5px solid var(--seal);padding:2px 0 2px 20px;margin:24px 0}
+.note p{margin:0;font-size:15px;color:var(--ink-2);max-width:64ch}
+.note .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--seal);display:block;margin-bottom:5px;font-weight:500}
+ul{margin:0 0 16px;padding-left:20px;max-width:66ch}
+li{margin-bottom:8px;line-height:1.75}
+li::marker{color:var(--ink-3)}
+.cap{font-size:13.5px;color:var(--ink-3);margin-top:-8px}
+
+.plays{margin:8px 0 20px}
+.play{border:1.5px solid var(--ink);background:var(--paper-2);margin-bottom:14px}
+.play:last-child{margin-bottom:0}
+.play-hd{display:grid;grid-template-columns:56px 1fr;border-bottom:1px solid var(--rule)}
+.play-n{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--paper)}
+.play-t{padding:14px 18px}
+.play-name{font-weight:600;font-size:16px;letter-spacing:-0.01em}
+.play-kill{font-size:13.5px;color:var(--seal);margin-top:2px;line-height:1.55}
+.play-b{padding:16px 18px}
+.play-b p{margin:0 0 12px;font-size:14.5px;line-height:1.7;max-width:none}
+.play-b p:last-child{margin-bottom:0}
+.play-b .sql{margin:0 0 12px;border-width:1px;border-color:var(--rule)}
+.play-b .sql:last-child{margin-bottom:0}
+footer{padding:38px 0 60px;border-top:2px solid var(--ink);margin-top:8px}
+footer p{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  color:var(--ink-3);margin:0}
+:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+
+@media (max-width:760px){
+  .wrap{padding:0 20px}
+  .deploy{grid-template-columns:1fr}
+  .call{grid-template-columns:1fr;gap:7px}
+  .tier{grid-template-columns:48px 1fr}
+  .axis-row{grid-template-columns:1fr;gap:6px}
+  .axis-lbl{text-align:left}
+  .masthead{padding-top:38px}
+  section{padding:38px 0}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="doc-meta">
+      <span>아키텍처 기준</span><span>배포 단위 3</span><span>개정 2 · 인덱스 전략 추가</span>
+    </div>
+    <h1>날짜는 컬럼이 아니라<br>이력 행으로 넣는다</h1>
+    <p class="standfirst">임직원 서비스가 입퇴사·발령 날짜를 갖는 건 맞다. 다만 <strong>발효일과 등록일 두 축</strong>을 함께 갖지 않으면 소급 발령을 표현할 수 없고, 급여 재계산 판단이 불가능해진다. 이 문서는 서비스 세 개의 배치 근거와 날짜 설계 기준을 정리한 것이다.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section>
+  <p class="eyebrow">결론</p>
+  <h2>배포 단위는 셋, 인증은 별도 인프라</h2>
+
+  <div class="deploy">
+    <div class="unit span2">
+      <div class="unit-hd infra">
+        <div class="unit-name">Keycloak</div>
+        <div class="unit-sub">infrastructure · not a domain service</div>
+      </div>
+      <div class="unit-body">
+        <div class="mods"><span class="mod b">계정 · 세션 · 토큰 · 역할</span></div>
+        <div class="dbtag">인증 주체만 소유 · 사번과 <code>sub</code>로 연결</div>
+      </div>
+    </div>
+
+    <div class="unit span2">
+      <div class="unit-hd base">
+        <div class="unit-name">임직원 서비스</div>
+        <div class="unit-sub">shared master · fax · mail · core</div>
+      </div>
+      <div class="unit-body">
+        <div class="mods">
+          <span class="mod b">임직원 본체</span><span class="mod b">재직 이력</span><span class="mod b">발령 이력</span>
+        </div>
+        <div class="dbtag">DB-0 · 시점 조회 가능 · 급여 체인 밖에도 소비자 다수</div>
+      </div>
+    </div>
+
+    <div class="unit">
+      <div class="unit-hd edge">
+        <div class="unit-name">근태 수집</div>
+        <div class="unit-sub">scale out · N instances</div>
+      </div>
+      <div class="unit-body">
+        <div class="mods"><span class="mod solo">출퇴근 기록</span></div>
+        <div class="dbtag">DB-1 · append only · 사번만 안다</div>
+      </div>
+    </div>
+
+    <div class="unit">
+      <div class="unit-hd core">
+        <div class="unit-name">코어</div>
+        <div class="unit-sub">modulith · web 2 + batch 1</div>
+      </div>
+      <div class="unit-body">
+        <div class="mods">
+          <span class="mod">계약</span><span class="mod">근태 확정</span><span class="mod">급여</span><span class="mod">4대보험</span>
+        </div>
+        <div class="dbtag">DB-2 · 로컬 트랜잭션 · 임직원 스냅샷 보유</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="boundary">프로세스 경계 셋 · 트랜잭션 경계는 코어 안에 하나</div>
+
+  <p>근태확정 → 급여 → 4대보험 체인은 코어 한 배포 단위 안에 있다. <strong>이 셋이 한 커밋에 묶인다는 게 사가가 필요 없는 이유</strong>이고, 임직원이 밖으로 나가도 이 성질은 변하지 않는다. 코어는 마감 시점에 임직원 정보를 스냅샷으로 확보하고, 그 이후 계산은 전부 DB-2 안에서 끝난다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">근거 · 분리 판단</p>
+  <h2>소비자가 급여 체인 밖에 있으면 분리한다</h2>
+
+  <p>임직원 마스터를 코어에 두느냐 빼느냐는 <strong>누가 읽는가</strong>로 갈린다. 소비자가 급여 체인 넷뿐이라면 코어에 두는 게 맞다. 팩스·메일·알림처럼 급여와 무관한 서비스들이 함께 읽는다면 분리가 맞다.</p>
+
+  <p>다만 분리했으니 소비 방식을 두 갈래로 나눠야 한다. 같은 방식으로 서비스하면 한쪽이 반드시 깨진다.</p>
+
+  <div class="mx-scroll">
+    <table class="plain">
+      <thead>
+        <tr><th></th><th>참조형 · 팩스 메일 알림</th><th>계산형 · 급여 4대보험</th></tr>
+      </thead>
+      <tbody>
+        <tr><th style="width:130px">필요한 것</th><td>이름, 이메일, 현재 부서</td><td>기준일 시점의 재직·조직·직급</td></tr>
+        <tr><th>조회 방식</th><td>실시간 API</td><td>마감 시점 스냅샷 1회</td></tr>
+        <tr><th>낡아도 되나</th><td>된다</td><td>안 된다. 정산 오류로 이어진다</td></tr>
+        <tr><th>임직원 장애 시</th><td>기능 하나 실패</td><td>스냅샷 확보 후라면 영향 없음</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="lbl">계약은 임직원으로 보내지 않는다</span>
+    <p>계약에는 연봉과 수당 조건이 들어 있다. 임직원 서비스로 옮기면 팩스·메일 서비스가 접근 가능한 범위 안에 급여 정보가 들어온다. 지금 읽지 않아도 경로가 열려 있는 것 자체가 문제다. 임직원은 <strong>누가 있는가</strong>를 답하고, 코어는 <strong>얼마를 받는가</strong>를 답한다.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">기준 · 날짜 설계</p>
+  <h2>시간축이 둘이어야 소급이 표현된다</h2>
+
+  <p>발령에 날짜를 하나만 두면 <strong>3월 1일부로 승진, 5월 10일에 등록</strong>이라는 사실을 기록할 수 없다. 발효일만 있으면 5월에 등록했다는 사실이 사라지고, 등록일만 있으면 3월부터 적용된다는 사실이 사라진다.</p>
+
+  <div class="axes">
+    <div class="axis-row">
+      <div class="axis-lbl">발효일</div>
+      <div class="axis-bar">
+        <div class="axis-line"></div>
+        <div class="pin" style="left:14%"><i></i><span>3.1 승진 적용 시작</span></div>
+      </div>
+    </div>
+    <div class="axis-row">
+      <div class="axis-lbl">등록일</div>
+      <div class="axis-bar">
+        <div class="axis-line"></div>
+        <div class="pin" style="left:74%"><i></i><span>5.10 시스템 입력</span></div>
+      </div>
+    </div>
+    <p class="axis-note">두 날짜 사이에 3월·4월 급여가 이미 마감돼 있다. <strong>그 간격이 곧 재계산 대상 기간이다.</strong> 축이 하나면 이 간격을 계산할 수 없고, 소급 정산 대상을 시스템이 판정하지 못한다.</p>
+  </div>
+
+  <h3>테이블은 셋으로 나눈다</h3>
+
+  <div class="sql"><span class="c">-- 본체: 거의 바뀌지 않는 것만</span>
+<span class="k">CREATE TABLE</span> <span class="t">employee</span> (
+  id            bigint <span class="k">PRIMARY KEY</span>,
+  tenant_id     bigint <span class="k">NOT NULL</span>,
+  employee_no   varchar <span class="k">NOT NULL</span>,
+  name          varchar <span class="k">NOT NULL</span>,
+  keycloak_sub  uuid <span class="k">UNIQUE</span>
+);
+
+<span class="c">-- 재직 이력: 입사 퇴사 휴직 복직</span>
+<span class="k">CREATE TABLE</span> <span class="t">employment_history</span> (
+  employee_id    bigint <span class="k">NOT NULL</span>,
+  status         varchar <span class="k">NOT NULL</span>,   <span class="c">-- 재직 휴직 퇴직</span>
+  effective_from date <span class="k">NOT NULL</span>,
+  effective_to   date,
+  registered_at  timestamptz <span class="k">NOT NULL</span>,
+  reason         varchar
+);
+
+<span class="c">-- 발령 이력: 조직 직급 직책</span>
+<span class="k">CREATE TABLE</span> <span class="t">assignment_history</span> (
+  employee_id    bigint <span class="k">NOT NULL</span>,
+  dept_id        bigint,
+  position       varchar,
+  effective_from date <span class="k">NOT NULL</span>,
+  effective_to   date,
+  registered_at  timestamptz <span class="k">NOT NULL</span>
+);</div>
+
+  <p class="cap">재직과 발령을 한 테이블에 합치지 않는 이유는 소비자가 다르기 때문이다. 4대보험은 자격 취득·상실만 보고, 인건비 배부는 발령만 본다.</p>
+
+  <h3>휴직은 날짜로 표현되지 않는다</h3>
+  <p>육아휴직 중에는 급여를 지급하지 않고 4대보험은 납부유예된다. 재직도 퇴사도 아닌 제3의 상태다. <strong>입사일과 퇴사일 두 컬럼만으로는 이 기간을 표현할 수 없고</strong>, 휴직자에게 급여가 계산되는 사고로 이어진다. 재직 이력을 상태 이력으로 만들어야 하는 실무적 이유가 이것이다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">기준 · 기준일 정책</p>
+  <h2>도메인마다 보는 날짜가 다르다</h2>
+
+  <p>이력이 있어도 <strong>어느 날짜로 뽑느냐</strong>가 정해져 있지 않으면 매번 다른 답이 나온다. 특히 4대보험은 급여와 기준이 달라서, 명시하지 않으면 공단 신고분과 사내 계산이 어긋난다.</p>
+
+  <div class="mx-scroll">
+    <table class="plain">
+      <thead><tr><th>용도</th><th>기준일</th><th>어긋나면</th></tr></thead>
+      <tbody>
+        <tr><th style="width:150px">급여 대상자</th><td>지급 기준일 재직 여부</td><td>중도 입퇴사자 일할 계산이 빠진다</td></tr>
+        <tr><th>부서별 인건비</th><td>월말 소속 또는 발령일 안분</td><td>부서 이동자 인건비가 이중 계상된다</td></tr>
+        <tr><th>4대보험</th><td>자격 취득일 · 상실일</td><td>공단 신고분과 사내 계산이 불일치한다</td></tr>
+        <tr><th>근태 집계</th><td>근무일별 소속</td><td>이동 전후 근태가 한 부서로 몰린다</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>이걸 값 객체로 명시하고 스냅샷에 함께 저장해라. 나중에 <strong>이 급여가 왜 이렇게 나왔나</strong>라는 질문에 답할 유일한 근거가 된다.</p>
+
+  <div class="sql"><span class="k">public record</span> <span class="t">PayrollBasis</span>(
+    YearMonth period,
+    LocalDate employmentAsOf,    <span class="c">// 재직 판정</span>
+    LocalDate organizationAsOf,  <span class="c">// 조직 귀속</span>
+    LocalDate insuranceAsOf      <span class="c">// 보험 자격</span>
+) {}</div>
+</section>
+
+<section>
+  <p class="eyebrow">실행 · PostgreSQL 공략점</p>
+  <h2>이력을 쌓는 비용보다 잘못 읽는 비용이 크다</h2>
+
+  <p>시점 조회를 붙인다고 데이터가 늘지는 않는다. 데이터를 늘리는 건 이력 테이블 자체고, <code>asOf</code>는 이미 쌓인 이력을 읽는 방법일 뿐이다. 실제 위험은 용량이 아니라 <strong>인덱스가 안 먹는 쿼리 패턴</strong>과 <strong>겹쳐 들어간 이력 행</strong> 쪽에 있다.</p>
+
+  <p>아래 다섯은 효과가 큰 순서로 정렬했다. 앞의 셋은 스키마 수정 수준이고, 뒤의 둘은 설계 결정이다.</p>
+
+  <div class="plays">
+
+    <div class="play">
+      <div class="play-hd">
+        <div class="play-n">01</div>
+        <div class="play-t">
+          <div class="play-name">종료일을 NULL 대신 infinity로</div>
+          <div class="play-kill">막는 것 · 옵티마이저가 인덱스를 포기하는 현상</div>
+        </div>
+      </div>
+      <div class="play-b">
+        <p>종료일이 NULL이면 조건이 <code>effective_to IS NULL OR effective_to &gt; $2</code> 형태가 된다. OR 분기가 들어가는 순간 범위 인덱스를 제대로 못 탄다. 열린 구간을 무한대 날짜로 표현하면 조건이 단순한 범위 비교로 정리된다.</p>
+        <div class="sql">effective_to <span class="k">date NOT NULL DEFAULT</span> <span class="t">'infinity'</span></div>
+      </div>
+    </div>
+
+    <div class="play">
+      <div class="play-hd">
+        <div class="play-n">02</div>
+        <div class="play-t">
+          <div class="play-name">daterange 생성 컬럼과 GiST 인덱스</div>
+          <div class="play-kill">막는 것 · 범위 조건 두 개를 B-tree로 훑는 비용</div>
+        </div>
+      </div>
+      <div class="play-b">
+        <p>시작일과 종료일을 각각 비교하는 대신 범위 타입 하나로 묶는다. 포함 연산자 <code>@&gt;</code> 하나로 조건이 끝나고 인덱스가 그대로 탄다. 생성 컬럼이라 애플리케이션이 따로 채울 필요가 없다.</p>
+        <div class="sql"><span class="k">ALTER TABLE</span> <span class="t">assignment_history</span>
+  <span class="k">ADD COLUMN</span> valid_period daterange
+  <span class="k">GENERATED ALWAYS AS</span> (daterange(effective_from, effective_to, <span class="t">'[)'</span>)) <span class="k">STORED</span>;
+
+<span class="k">CREATE INDEX</span> idx_assignment_asof
+  <span class="k">ON</span> <span class="t">assignment_history</span> <span class="k">USING</span> gist (tenant_id, valid_period, employee_id);
+
+<span class="c">-- 조회는 이 한 줄로 끝난다</span>
+<span class="k">SELECT</span> * <span class="k">FROM</span> <span class="t">assignment_history</span>
+<span class="k">WHERE</span> tenant_id = $1 <span class="k">AND</span> valid_period @&gt; $2::date;</div>
+      </div>
+    </div>
+
+    <div class="play">
+      <div class="play-hd">
+        <div class="play-n">03</div>
+        <div class="play-t">
+          <div class="play-name">겹침 방지를 DB 제약으로 내린다</div>
+          <div class="play-kill">막는 것 · 같은 사람에게 기간이 겹치는 발령 두 건</div>
+        </div>
+      </div>
+      <div class="play-b">
+        <p>겹친 이력이 들어가면 시점 조회가 두 행을 반환하고, 급여 계산이 어느 쪽을 쓸지 비결정적이 된다. 발견도 늦다 — 소급 재계산을 돌려보고 나서야 드러난다.</p>
+        <p><strong>정합성 대책 중 비용 대비 효과가 가장 크다.</strong> 애플리케이션 검증은 동시 요청에 뚫리지만 이 제약은 뚫리지 않는다.</p>
+        <div class="sql"><span class="k">ALTER TABLE</span> <span class="t">assignment_history</span>
+  <span class="k">ADD CONSTRAINT</span> no_overlap
+  <span class="k">EXCLUDE USING</span> gist (employee_id <span class="k">WITH</span> =, valid_period <span class="k">WITH</span> &amp;&amp;);</div>
+      </div>
+    </div>
+
+    <div class="play">
+      <div class="play-hd">
+        <div class="play-n">04</div>
+        <div class="play-t">
+          <div class="play-name">마감 조회는 조인 두 번으로 끝낸다</div>
+          <div class="play-kill">막는 것 · 대상자 수만큼 반복되는 단건 조회</div>
+        </div>
+      </div>
+      <div class="play-b">
+        <p>재직 이력과 발령 이력을 각각 한 번씩만 조인한다. 5000명이라도 인덱스를 타면 수십 밀리초 수준이고, 마감은 월 1회이므로 이 정도면 성능 논의 대상이 아니다.</p>
+        <div class="sql"><span class="k">SELECT</span> e.employee_no, e.name, a.dept_id, a.position, h.status
+<span class="k">FROM</span> <span class="t">employee</span> e
+<span class="k">JOIN</span> <span class="t">employment_history</span> h <span class="k">ON</span> h.employee_id = e.id
+                          <span class="k">AND</span> h.valid_period @&gt; $2::date
+<span class="k">LEFT JOIN</span> <span class="t">assignment_history</span> a <span class="k">ON</span> a.employee_id = e.id
+                               <span class="k">AND</span> a.valid_period @&gt; $2::date
+<span class="k">WHERE</span> e.tenant_id = $1 <span class="k">AND</span> h.status <span class="k">IN</span> (<span class="t">'재직'</span>, <span class="t">'휴직'</span>);</div>
+        <p>주의할 건 쿼리가 아니라 응답 크기다. 페이징하되 앞서 정리한 <strong>건수 대조</strong>를 반드시 함께 걸어라 — 부분 확보를 잡는 유일한 수단이다.</p>
+      </div>
+    </div>
+
+    <div class="play">
+      <div class="play-hd">
+        <div class="play-n">05</div>
+        <div class="play-t">
+          <div class="play-name">급여 결과를 덮어쓰지 않는다</div>
+          <div class="play-kill">막는 것 · 소급 정산 후 신고분 근거 소실</div>
+        </div>
+      </div>
+      <div class="play-b">
+        <p>재계산할 때 기존 결과를 갱신하면 원천징수영수증과 4대보험 신고분이 어느 버전 기준이었는지 추적할 수 없게 된다. 감사 요건이라 선택 사항이 아니다.</p>
+        <div class="sql"><span class="k">CREATE TABLE</span> <span class="t">payroll.payroll_result</span> (
+  period        date,
+  employee_no   varchar,
+  revision      int,          <span class="c">-- 1, 2, 3...</span>
+  amount        numeric,
+  basis_as_of   date,
+  calculated_at timestamptz,
+  <span class="k">PRIMARY KEY</span> (period, employee_no, revision)
+);</div>
+        <p><strong>여기가 실제로 데이터가 늘어나는 지점이다.</strong> 다만 소급이 발생하는 비율이 낮아 실질 증가는 크지 않다.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <h3>데이터량 실측 · 임직원 10만 명, 5년 누적</h3>
+
+  <div class="mx-scroll">
+    <table class="plain">
+      <thead><tr><th>테이블</th><th>누적 행</th><th>증가 근거</th></tr></thead>
+      <tbody>
+        <tr><th style="width:150px">재직 이력</th><td>약 30만</td><td>1인당 입사·휴복직·퇴사 3건</td></tr>
+        <tr><th>발령 이력</th><td>약 100만</td><td>1인당 연 1~3건</td></tr>
+        <tr><th>급여 결과</th><td>약 600만</td><td>월 1건 + 소급 리비전</td></tr>
+        <tr><th>근태 원천</th><td>약 2.5억</td><td>1인당 1일 2건 × 250일</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>이력 테이블 전체를 합쳐도 <strong>근태 원천의 1% 미만</strong>이다. 발령 이력은 사람 수가 아니라 사건 수에 비례하고, 인사 발령은 연 단위로 몇 건뿐이라 애초에 커질 수 없는 구조다. 용량을 이유로 시점 조회를 포기할 근거는 없다.</p>
+
+  <div class="note">
+    <span class="lbl">마이그레이션 순서 주의</span>
+    <p>기존 종료일이 NULL 허용이면 <code>infinity</code>로 바꾸는 게 먼저다. 그리고 <strong>겹침 제약은 마지막에 건다</strong> — 기존 데이터에 이미 겹친 행이 있으면 제약 생성 자체가 실패한다. 검사 쿼리를 먼저 돌려 겹친 구간을 정리한 뒤 제약을 거는 순서여야 한다.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">근거 · 데이터 배치</p>
+  <h2>DB는 셋, 스키마는 일곱</h2>
+
+  <div class="mx-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>접근 주체</th>
+          <th>employee</th><th>history</th><th>contract</th><th>attendance</th>
+          <th>payroll</th><th>insurance</th><th>raw_punch</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th>팩스 · 메일</th>
+          <td class="ro">R*</td><td class="no">—</td><td class="no">—</td><td class="no">—</td>
+          <td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><th>임직원 서비스</th>
+          <td class="rw">RW</td><td class="rw">RW</td><td class="no">—</td><td class="no">—</td>
+          <td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><th>근태 수집</th>
+          <td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td>
+          <td class="no">—</td><td class="no">—</td><td class="rw">RW</td></tr>
+        <tr><th>코어 · 웹</th>
+          <td class="ro">R*</td><td class="no">—</td><td class="rw">RW</td><td class="ro">R</td>
+          <td class="ro">R</td><td class="ro">R</td><td class="no">—</td></tr>
+        <tr><th>코어 · 배치</th>
+          <td class="ro">R*</td><td class="ro">R*</td><td class="ro">R</td><td class="rw">RW</td>
+          <td class="rw">RW</td><td class="rw">RW</td><td class="ro">R†</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="cap">* DB 직접 접근이 아니라 임직원 서비스 API 경유. &nbsp;† 원본이 아니라 읽기 리플리카.</p>
+
+  <p><strong>DB-0에 직접 붙는 건 임직원 서비스뿐이다.</strong> 코어도 팩스도 API를 통해서만 읽는다. 여기서 DB 공유를 허용하면 분산 모놀리스가 되고, 임직원 스키마를 바꿀 때마다 전부 같이 배포해야 한다.</p>
+
+  <h3>임직원 서비스가 반드시 제공해야 할 것</h3>
+  <ul>
+    <li><strong>시점 조회.</strong> <code>GET /employees?asOf=2026-03-31&amp;tenantId=123</code> — 발령 이력이 있어도 API가 현재 상태만 주면 이력은 쓰이지 않는다.</li>
+    <li><strong>벌크 조회.</strong> 500명 마감에 500번 호출은 불가. 한 요청에 대상자 전체가 나와야 한다.</li>
+    <li><strong>소급 발령 통보.</strong> <code>registered_at</code>이 <code>effective_from</code>보다 늦은 등록이 발생하면 이벤트로 알린다.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="eyebrow">기준 · 소급 처리</p>
+  <h2>마감된 급여를 시스템이 바꾸지 않는다</h2>
+
+  <p>소급 발령이 등록되면 영향받는 마감 기간을 판정해 <strong>재계산 대상 큐에 넣기만 한다.</strong> 자동 반영하지 마라. 급여는 담당자 승인 없이 숫자가 바뀌면 안 되는 도메인이다.</p>
+
+  <div class="sql"><span class="c">// 임직원 서비스 → 코어. 실시간 경로는 이것 하나뿐이다</span>
+<span class="t">AssignmentBackdated</span>(employeeId, effectiveFrom, registeredAt)
+
+<span class="c">// 코어: 영향 기간 판정 후 큐 적재</span>
+affected = payroll.findClosedPeriodsAfter(effectiveFrom);
+affected.forEach(p -> retroQueue.enqueue(p, employeeId));</div>
+
+  <p>나머지는 전부 마감 시점 스냅샷 조회로 끝난다. <strong>임직원과 코어 사이에 상시 동기화가 필요 없다</strong>는 뜻이고, 이것이 두 서비스를 느슨하게 유지하는 핵심이다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">근거 · 도입 판정</p>
+  <h2>넣지 않을 것을 먼저 정한다</h2>
+
+  <div class="calls">
+    <div class="call">
+      <div class="verdict no">불필요</div>
+      <div class="call-b"><span class="call-t">사가 패턴</span>
+        <p>근태 → 급여 → 보험은 단방향이고 급여가 근태 상태를 바꾸지 않는다. 소급 정산은 보상 트랜잭션이 아니라 업무 로직이다. 임직원이 분리돼도 이 판단은 유지된다 — 임직원 → 코어 역시 단방향이다.</p></div>
+    </div>
+    <div class="call">
+      <div class="verdict no">불필요</div>
+      <div class="call-b"><span class="call-t">카프카</span>
+        <p>코어 안 소비자는 전부 같은 JVM에 있다. 임직원 → 코어 통보도 이벤트 하나뿐이라 PGMQ로 충분하다. 프로세스 밖으로 나갈 이벤트가 늘면 그때 <code>@Externalized</code>로 경로가 열린다.</p></div>
+    </div>
+    <div class="call">
+      <div class="verdict yes">유지</div>
+      <div class="call-b"><span class="call-t">PGMQ</span>
+        <p>근태 수집 → 코어, 임직원 → 코어 두 구간을 맡는다. 같은 Postgres 안이면 소비와 적재가 한 트랜잭션에 묶여 별도 아웃박스 테이블이 필요 없다.</p></div>
+    </div>
+    <div class="call">
+      <div class="verdict yes">유지</div>
+      <div class="call-b"><span class="call-t">Keycloak · API 게이트웨이</span>
+        <p>인증 주체와 진입점을 맡는다. 도메인 서비스가 아니라 인프라 컴포넌트다. 게이트웨이가 여러 서비스 응답을 조합하기 시작하면 그때부터 네 번째 서비스가 된다.</p></div>
+    </div>
+    <div class="call">
+      <div class="verdict yes">도입</div>
+      <div class="call-b"><span class="call-t">Event Publication Registry</span>
+        <p>코어 안 체인의 신뢰성, 그리고 Keycloak 계정 생성처럼 외부 호출이 섞인 단계의 재시도를 맡는다. 입사 처리는 커밋되고 계정 생성 실패만 미완료로 남아 재시도된다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">한계</p>
+  <h2>이 구조가 보장하지 않는 것</h2>
+
+  <div class="mx-scroll">
+    <table class="plain">
+      <tbody>
+        <tr><th style="width:190px">계산 정확성</th>
+          <td>Registry가 막는 건 <strong>실행되지 않고 사라지는 것</strong>이지 <strong>잘못 실행되는 것</strong>이 아니다. 기준일 정책이 틀리면 재시도해도 계속 틀린다.</td></tr>
+        <tr><th>스냅샷 이후 변경</th>
+          <td>마감 시작 후 등록된 발령은 그 마감에 반영되지 않는다. 이건 버그가 아니라 의도된 동작이고, 소급 큐로 넘어간다.</td></tr>
+        <tr><th>이벤트 처리량</th>
+          <td>이벤트당 DB row 하나. 배치 인스턴스 한 대가 상한이므로 고객사가 늘면 폴링 분산이 필요해진다.</td></tr>
+        <tr><th>모니터링 없는 재시도</th>
+          <td>재시도가 계속 실패하면 미완료 레코드가 조용히 쌓인다. 한 시간 이상 미완료인 이벤트를 알리는 잡을 같은 커밋에 넣어라.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>실무에서 가장 자주 사고로 이어지는 건 마지막 항목이고, 그다음이 첫 항목이다. <strong>기준일 정책 문서화와 미완료 이벤트 알림, 이 둘이 없으면 나머지 구조는 안전망 없이 도는 것이다.</strong></p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>임직원 → 계약 · 근태확정 → 급여 → 4대보험 · 방향은 위로만 · 날짜는 두 축으로</p>
+  </div>
+</footer>
+
+</body>
+</html>
