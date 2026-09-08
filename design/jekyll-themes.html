@@ -1,0 +1,258 @@
+<title>Jekyll 테마 실사용 지도</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F2F3; --surface: #FFFFFF; --surface-2: #FAF8F9;
+    --border: #E3DEE0; --border-strong: #CFC7CA;
+    --ink: #1A171A; --ink-2: #433C41; --muted: #6E6569;
+    --accent: #9E1F3D; --accent-ink: #7E1830; --accent-weak: #F5E5E9;
+    --ok: #1F6B4A; --ok-weak: #E2F0E8;
+    --warn: #8A5A12; --warn-weak: #F6EBDA;
+    --shadow: 0 1px 2px rgba(26,23,26,.05), 0 8px 24px -12px rgba(26,23,26,.14);
+    --sans: 'IBM Plex Sans', 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+    --serif: 'IBM Plex Serif', 'Apple SD Gothic Neo', Georgia, serif;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141216; --surface: #1D1A1E; --surface-2: #232025;
+      --border: #322D33; --border-strong: #453E46;
+      --ink: #EFEBED; --ink-2: #C6BEC3; --muted: #948B91;
+      --accent: #E8788F; --accent-ink: #F0A0B0; --accent-weak: #3A222A;
+      --ok: #6FC79C; --ok-weak: #1D2E27;
+      --warn: #D9A85E; --warn-weak: #302518;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141216; --surface: #1D1A1E; --surface-2: #232025;
+    --border: #322D33; --border-strong: #453E46;
+    --ink: #EFEBED; --ink-2: #C6BEC3; --muted: #948B91;
+    --accent: #E8788F; --accent-ink: #F0A0B0; --accent-weak: #3A222A;
+    --ok: #6FC79C; --ok-weak: #1D2E27;
+    --warn: #D9A85E; --warn-weak: #302518;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 56px 22px 96px; display: flex; flex-direction: column; gap: 44px; }
+  a { color: var(--accent-ink); }
+
+  header { display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(30px, 5.2vw, 42px); line-height: 1.15; letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+  .lede { color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .criteria { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
+  .criteria h2 { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .04em; margin: 0; color: var(--muted); text-transform: uppercase; }
+  .criteria ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 11px; }
+  .criteria li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: baseline; font-size: 14.5px; color: var(--ink-2); }
+  .criteria li b { color: var(--ink); font-weight: 600; }
+  .num { font-family: var(--mono); font-size: 11.5px; color: var(--accent); font-weight: 500; }
+
+  .themes { display: flex; flex-direction: column; gap: 18px; }
+  .sort-note { font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: .04em; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow); }
+  .card.stale { border-style: dashed; border-color: var(--border-strong); }
+  .card-head { display: flex; flex-direction: column; gap: 7px; }
+  .name-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .card h3 { font-family: var(--serif); font-weight: 600; font-size: 22px; letter-spacing: -.01em; margin: 0; }
+  .badge { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+  .badge.live { background: var(--ok-weak); color: var(--ok); }
+  .badge.slow { background: var(--warn-weak); color: var(--warn); }
+  .verdict { color: var(--ink-2); margin: 0; max-width: 60ch; }
+  .stats { display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .stats span b { color: var(--ink-2); font-weight: 500; }
+  .caution { font-size: 13.5px; color: var(--ink-2); background: var(--surface-2); border-left: 2px solid var(--border-strong); padding: 9px 14px; border-radius: 0 5px 5px 0; }
+  .caution b { color: var(--ink); font-weight: 600; }
+
+  .demo { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: var(--accent); color: #fff; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 9px 16px; border-radius: 7px; }
+  .demo:hover { filter: brightness(1.12); }
+  .demo .arrow { font-family: var(--mono); opacity: .8; }
+
+  .live-block { display: flex; flex-direction: column; gap: 9px; }
+  .live-label { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .live-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 7px 18px; }
+  .live-list a { display: flex; align-items: baseline; gap: 7px; text-decoration: none; font-size: 13.5px; color: var(--ink-2); padding: 3px 0; border-bottom: 1px solid transparent; }
+  .live-list a:hover { color: var(--accent-ink); border-bottom-color: var(--border-strong); }
+  .live-list .host { font-family: var(--mono); font-size: 12px; }
+  .live-list .kr { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--accent); background: var(--accent-weak); padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
+  .live-list .note { color: var(--muted); font-size: 12px; }
+
+  .footer { border-top: 1px solid var(--border); padding-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .footer h2 { font-family: var(--serif); font-size: 19px; font-weight: 600; margin: 0; }
+  .footer p { margin: 0; color: var(--ink-2); max-width: 62ch; }
+  .footer code { font-family: var(--mono); font-size: 12.5px; background: var(--surface-2); border: 1px solid var(--border); padding: 1.5px 5px; border-radius: 4px; }
+  .stamp { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; margin-top: 6px; }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 40px 16px 72px; gap: 34px; }
+    .card { padding: 20px 18px; }
+    .live-list { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Jekyll · GitHub Pages</div>
+    <h1>Jekyll 테마 실사용 지도</h1>
+    <p class="lede">데모는 글이 세 개라 다 예쁘다. 그래서 <strong>실제로 글이 쌓인 블로그</strong>를 테마별로 찾아 열리는 것만 추렸다. 링크는 전부 열어봤고, 응답 200 을 확인했다. 한국어 블로그에는 <span class="kr" style="font-family:var(--mono);font-size:9.5px;padding:1px 5px;border-radius:3px;background:var(--accent-weak);color:var(--accent)">KR</span> 표시를 붙였다.</p>
+  </header>
+
+  <section class="criteria">
+    <h2>데모보다 먼저 볼 것</h2>
+    <ol>
+      <li><span class="num">01</span><span><b>최근 커밋 날짜.</b> 1년 넘게 멈춘 테마는 의존성 올라갈 때 빌드가 깨지고, 고쳐줄 사람이 없다.</span></li>
+      <li><span class="num">02</span><span><b>코드블록.</b> 글의 절반은 코드다. 긴 줄이 잘리지 않고 가로 스크롤 되는지, 복사 버튼이 있는지, 다크모드에서 색이 죽지 않는지.</span></li>
+      <li><span class="num">03</span><span><b>글이 100개일 때.</b> 큰 썸네일 카드형은 글이 쌓이면 스크롤 지옥이 된다. 목록이 조밀한 쪽이 오래 간다.</span></li>
+      <li><span class="num">04</span><span><b>폰으로 열어보기.</b> 검색 유입의 절반 이상이 모바일이다.</span></li>
+      <li><span class="num">05</span><span><b>GitHub Actions 배포 지원.</b> Pages 기본 빌드는 safe mode 라 플러그인이 제한된다. Actions 방식이어야 자유롭다.</span></li>
+    </ol>
+  </section>
+
+  <section class="themes">
+    <div class="sort-note">정렬 기준 — 유지보수 활성도 (별 수가 아니라 마지막 커밋)</div>
+
+    <article class="card">
+      <div class="card-head">
+        <div class="name-row"><h3>al-folio</h3><span class="badge live">활발 · 2일 전</span></div>
+        <p class="verdict">학술·포트폴리오 계열. 블로그 + 프로젝트 + CV 를 한 사이트에 담는 구조라 정갈하고 밀도가 높다. 별 수가 이 목록에서 제일 많다.</p>
+        <div class="stats"><span>★ <b>16,075</b></span><span>최종 커밋 <b>2026-08-28</b></span><span>열린 이슈 <b>17</b></span></div>
+      </div>
+      <div class="caution"><b>주의</b> — 블로그 전용이 아니라 개인 사이트에 가깝다. 글 위주로 갈 거면 과할 수 있다.</div>
+      <a class="demo" href="https://alshedivat.github.io/al-folio/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://logds.github.io/" target="_blank" rel="noopener"><span class="host">logds.github.io</span><span class="note">LogDS Lab</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <div class="name-row"><h3>Minimal Mistakes</h3><span class="badge live">활발 · 이달</span></div>
+        <p class="verdict">정통 강자. 문서화가 압도적으로 좋아서 막혔을 때 검색하면 답이 나온다. 레이아웃 종류가 많고 커스터마이징 자유도가 이 목록 최고.</p>
+        <div class="stats"><span>★ <b>13,559</b></span><span>최종 커밋 <b>2026-08-19</b></span><span>열린 이슈 <b>22</b></span></div>
+      </div>
+      <div class="caution"><b>주의</b> — 기본값이 다소 밋밋하다. 손을 봐야 예뻐지는 대신, 손대면 어디까지든 갈 수 있다.</div>
+      <a class="demo" href="https://mmistakes.github.io/minimal-mistakes/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://mademistakes.com/" target="_blank" rel="noopener"><span class="host">mademistakes.com</span><span class="note">제작자 · 글 많음</span></a></li>
+          <li><a href="https://myzhar.github.io/" target="_blank" rel="noopener"><span class="host">myzhar.github.io</span><span class="note">로보틱스</span></a></li>
+          <li><a href="https://biboyang.github.io/" target="_blank" rel="noopener"><span class="host">biboyang.github.io</span></a></li>
+          <li><a href="https://dfirscience.github.io/dfir.science/" target="_blank" rel="noopener"><span class="host">dfir.science</span><span class="note">보안</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <div class="name-row"><h3>Chirpy</h3><span class="badge live">활발 · 1개월</span></div>
+        <p class="verdict">개발자 블로그로는 기본값이 가장 완성돼 있다. 다크모드·전문검색·목차·Mermaid·코드 복사 버튼이 처음부터 다 들어 있어서 손댈 게 거의 없다. <strong>한국어 사용자가 이 목록에서 가장 많다.</strong></p>
+        <div class="stats"><span>★ <b>10,246</b></span><span>최종 커밋 <b>2026-07-30</b></span><span>열린 이슈 <b>34</b></span></div>
+      </div>
+      <div class="caution"><b>주의</b> — 좌측 고정 사이드바 레이아웃이 정체성이라 구조 자체를 바꾸긴 어렵다. 이 형태가 마음에 들어야 한다.</div>
+      <a class="demo" href="https://chirpy.cotes.page/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://jjxxmiin.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">jjxxmiin.github.io</span></a></li>
+          <li><a href="https://lyg0114.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">lyg0114.github.io</span></a></li>
+          <li><a href="https://aiworknote.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">aiworknote.github.io</span></a></li>
+          <li><a href="https://hyeoonji.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">hyeoonji.github.io</span></a></li>
+          <li><a href="https://seojun1.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">seojun1.github.io</span></a></li>
+          <li><a href="https://hunsil-sudo.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">hunsil-sudo.github.io</span></a></li>
+          <li><a href="https://eslider.github.io/" target="_blank" rel="noopener"><span class="host">eslider.github.io</span></a></li>
+          <li><a href="https://dave0x1.github.io/" target="_blank" rel="noopener"><span class="host">dave0x1.github.io</span></a></li>
+          <li><a href="https://ennerf.github.io/" target="_blank" rel="noopener"><span class="host">ennerf.github.io</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <div class="name-row"><h3>Beautiful Jekyll</h3><span class="badge live">보통 · 3개월</span></div>
+        <p class="verdict">세팅이 가장 빠르다. 구조가 단순해서 이해하기 쉽고, 글쓰기에만 집중하는 형태.</p>
+        <div class="stats"><span>★ <b>5,822</b></span><span>최종 커밋 <b>2026-05-25</b></span><span>열린 이슈 <b>23</b></span></div>
+      </div>
+      <div class="caution"><b>주의</b> — 기능이 적고, 일부는 유료 스폰서 플랜에서만 열린다. 목차·고급 검색 같은 건 직접 붙여야 한다.</div>
+      <a class="demo" href="https://beautifuljekyll.com/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://mdb1.github.io/" target="_blank" rel="noopener"><span class="host">mdb1.github.io</span><span class="note">글 90개+ · 필독</span></a></li>
+          <li><a href="https://deanattali.com/" target="_blank" rel="noopener"><span class="host">deanattali.com</span><span class="note">제작자</span></a></li>
+          <li><a href="https://desh2608.github.io/" target="_blank" rel="noopener"><span class="host">desh2608.github.io</span></a></li>
+          <li><a href="https://chauff.github.io/" target="_blank" rel="noopener"><span class="host">chauff.github.io</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <div class="name-row"><h3>jekyll-TeXt-theme</h3><span class="badge live">보통 · 3개월</span></div>
+        <p class="verdict">기술 문서에 강하다. 다국어가 기본으로 들어 있고, 문서형 레이아웃과 블로그형을 같이 쓸 수 있다.</p>
+        <div class="stats"><span>★ <b>3,340</b></span><span>최종 커밋 <b>2026-06-08</b></span><span>열린 이슈 <b>159</b></span></div>
+      </div>
+      <div class="caution"><b>주의</b> — 열린 이슈가 159개다. 별 수 대비 많은 편이라, 문제를 만났을 때 대기 줄이 길 수 있다.</div>
+      <a class="demo" href="https://kitian616.github.io/jekyll-TeXt-theme/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://haeeunkim.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">haeeunkim.github.io</span></a></li>
+          <li><a href="https://chenxiaohui.github.io/" target="_blank" rel="noopener"><span class="host">chenxiaohui.github.io</span></a></li>
+          <li><a href="https://antjun.github.io/" target="_blank" rel="noopener"><span class="host">antjun.github.io</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card stale">
+      <div class="card-head">
+        <div class="name-row"><h3>Yat</h3><span class="badge slow">정체 · 1년 4개월</span></div>
+        <p class="verdict">타이포가 예쁘고 가볍다. 다만 마지막 커밋이 2025년 4월이라 기준 01 에 걸린다.</p>
+        <div class="stats"><span>★ <b>1,206</b></span><span>최종 커밋 <b>2025-04-29</b></span><span>열린 이슈 <b>81</b></span></div>
+      </div>
+      <a class="demo" href="https://jeffreytse.github.io/jekyll-theme-yat/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://kimmand0o0.github.io/" target="_blank" rel="noopener"><span class="kr">KR</span><span class="host">kimmand0o0.github.io</span></a></li>
+          <li><a href="https://zeoecho.github.io/" target="_blank" rel="noopener"><span class="host">zeoecho.github.io</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card stale">
+      <div class="card-head">
+        <div class="name-row"><h3>Hydejack</h3><span class="badge slow">방치 · 2년</span></div>
+        <p class="verdict">이 목록에서 제일 예쁘다. 그런데 마지막 커밋이 2024년 9월이고, 좋은 기능 상당수가 유료 PRO 버전에만 있다.</p>
+        <div class="stats"><span>★ <b>1,638</b></span><span>최종 커밋 <b>2024-09-14</b></span><span>열린 이슈 <b>62</b></span></div>
+      </div>
+      <div class="caution"><b>권하지 않음</b> — 예쁨만 보고 고르기엔 2년 방치가 크다. 빌드가 깨지면 혼자 고쳐야 한다.</div>
+      <a class="demo" href="https://hydejack.com/" target="_blank" rel="noopener">공식 데모 <span class="arrow">→</span></a>
+      <div class="live-block">
+        <div class="live-label">실사용 블로그</div>
+        <ul class="live-list">
+          <li><a href="https://slewis916.github.io/" target="_blank" rel="noopener"><span class="host">slewis916.github.io</span></a></li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section class="footer">
+    <h2>결과</h2>
+    <p>실제로는 Jekyll 테마를 쓰지 않기로 했다. 원하는 수준의 개성은 기성 테마로 안 나와서 <code>Astro</code> 로 직접 만드는 쪽을 택했고, 최종적으로 <b>구글 검색 화면 재현</b>으로 갔다. 이 문서는 그 판단에 이르기까지의 조사 기록이다.</p>
+    <p>테마를 갈아타는 비용은 생각보다 작다. <code>_posts/</code> 의 마크다운 파일은 그대로 옮겨가고, 바뀌는 건 front matter 몇 줄뿐이다.</p>
+    <div class="stamp">링크 확인 2026-08-30 · 별 수와 커밋 날짜는 GitHub API 기준</div>
+  </section>
+
+</div>
