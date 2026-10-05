@@ -16,10 +16,10 @@ npm run build
 
 ## 배포
 
-`main`에 push하면 Actions가 빌드해서 `https://dunchi.github.io/google-blog/` 에 올린다.
+`main`에 push하면 Actions가 빌드해서 `https://gyoomun.github.io/google-blog/` 에 올린다.
 
 프로젝트 사이트라 `astro.config.mjs` 에 `base: '/google-blog'` 가 있다.
-나중에 루트(`dunchi.github.io`)로 옮기면 그 줄만 지우면 된다.
+나중에 루트(`gyoomun.github.io`)로 옮기면 그 줄만 지우면 된다.
 **링크는 반드시 `src/lib/url.ts` 의 `url()` 을 거칠 것.** 안 그러면 하위 경로에서 깨진다.
 
 ## 라이선스

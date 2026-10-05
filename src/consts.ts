@@ -3,18 +3,18 @@ export const SITE = {
   title: 'dunchi',
   description: '백엔드·인프라 개발자의 작업 기록',
   author: '김한주',
-  url: 'https://dunchi.github.io',
-  github: 'https://github.com/dunchi',
-  email: 'pearl.dunchi@gmail.com',
+  url: 'https://gyoomun.github.io',
+  github: 'https://github.com/gyoomun',
+  email: 'gyoomun@gmail.com',
 } as const;
 
 export const PAGE_SIZE = 10;
 
 /** 프로필 카드에 뜨는 바깥 링크들 */
 export const LINKS = [
-  { icon: 'github', label: 'GitHub', href: 'https://github.com/dunchi' },
+  { icon: 'github', label: 'GitHub', href: 'https://github.com/gyoomun' },
   { icon: 'tistory', label: '구 블로그', href: 'https://aiwcpd.tistory.com' },
-  { icon: 'resume', label: '구 이력서', href: 'https://dunchi.github.io/docs/README.md.html' },
+  { icon: 'resume', label: '구 이력서', href: 'https://gyoomun.github.io/docs/README.md.html' },
   { icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/channel/UCXkAt4TGK0L1NF8gr-LuZEQ' },
   { icon: 'kakao', label: '카카오톡', href: 'https://open.kakao.com/me/duunchi' },
 ] as const;
